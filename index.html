@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0a1f1a"><link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><title>B&A</title><script>try{document.documentElement.dataset.theme=localStorage.getItem('baml-theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')}catch(e){document.documentElement.dataset.theme='dark'}</script><style>
+:root{--bg:#0a1f1a;--w1:#12382d;--w2:#1d5242;--w3:#4d8a74;--p:#15382f;--bub:#1b463a;--me1:#3a7d68;--me2:#235e4c;--t:#f2e9de;--m:#98b3a6;--on:#f6efe6;--ac:#b9bf8c;--sh:0 6px 18px #0006,inset 0 1px 0 #ffffff14}
+:root[data-theme=light]{--bg:#efe5d9;--w1:#d6ddd0;--w2:#a9bfb1;--w3:#7f9d8d;--p:#fbf5ec;--bub:#fffaf3;--me1:#2a6a58;--me2:#14463a;--t:#123a31;--m:#6b857b;--on:#f6efe6;--ac:#8d9a55;--sh:0 8px 20px #123a3126,inset 0 1px 0 #fff}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:var(--bg);color:var(--t);font:15px/1.55 system-ui,"Segoe UI",Tahoma,sans-serif;display:flex;flex-direction:column;height:100dvh;overflow:hidden}
+.bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1}
+header{display:flex;align-items:center;gap:10px;padding:10px 16px;padding-top:max(10px,env(safe-area-inset-top));backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg) 55%,transparent);z-index:2}
+header h1{flex:1;font:700 26px Georgia,"Times New Roman",serif;letter-spacing:1px}
+header h1 b{color:var(--ac);font-weight:400}
+button,input{font:inherit;color:inherit;border:0;outline:0}
+button{cursor:pointer;background:linear-gradient(145deg,var(--me1),var(--me2));color:var(--on);font-weight:700;border-radius:16px;padding:11px 18px;box-shadow:var(--sh);transition:transform .12s}
+button:active{transform:scale(.94)}
+button.i{background:var(--p);color:var(--t);width:44px;height:44px;padding:0;border-radius:50%;font-size:18px}
+button.bad{background:#c9414f;color:#fff}
+input{background:var(--p);box-shadow:var(--sh);border-radius:16px;padding:13px 16px;width:100%}
+input::placeholder{color:var(--m)}input:focus{box-shadow:0 0 0 2px var(--me1)}
+main{flex:1;overflow:auto;padding:12px 14px;scrollbar-width:none}
+.card{background:var(--p);box-shadow:var(--sh);border-radius:26px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:14px;color:inherit;text-decoration:none}
+.av{width:50px;height:50px;border-radius:50%;background:linear-gradient(145deg,var(--w3),var(--ac));display:grid;place-items:center;font:700 20px Georgia,serif;color:#0f3d33;flex:none;box-shadow:var(--sh)}
+.card .n{flex:1;min-width:0}.card small{color:var(--m)}.card b{font-family:Georgia,serif;font-size:17px}
+nav{display:flex;gap:8px;margin:0 14px max(12px,env(safe-area-inset-bottom));padding:6px;background:var(--p);border-radius:26px;box-shadow:var(--sh)}
+nav button{flex:1;background:0;color:var(--m);box-shadow:none}nav button.on{background:linear-gradient(145deg,var(--me1),var(--me2));color:var(--on)}
+.hide{display:none!important}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.96)}}
+</style></head><body><svg class="bg" viewBox="0 0 400 800" preserveAspectRatio="none" aria-hidden="true"><path style="fill:var(--w1)" d="M0 0H400V250C300 190 190 330 0 250Z"/><path style="fill:var(--w2);opacity:.55" d="M400 110C300 170 240 390 0 430V800H400Z"/><path style="fill:var(--w3);opacity:.35" d="M0 570C150 520 280 690 400 610V800H0Z"/></svg><header><h1>B<b>&amp;</b>A</h1><button class="i" id="out" title="خروج">⎋</button></header>
+<main id="users"></main><main id="set" class="hide"></main>
+<nav><button class="on" id="n1">المحادثات</button><button id="n2" class="hide">الإعدادات</button></nav><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script><script>
+const cfg={apiKey:"AIzaSyCIYvVSg5KwPnD1lZK7u4oQx1e8l6KXgrc",authDomain:"baml-85266.firebaseapp.com",projectId:"baml-85266",storageBucket:"baml-85266.firebasestorage.app",messagingSenderId:"691113580861",appId:"1:691113580861:web:42f790d56f436ea6eb8d54",measurementId:"G-V2QNK2FNQ1"};
+firebase.initializeApp(cfg);
+const auth=firebase.auth(),db=firebase.firestore(),TS=()=>firebase.firestore.FieldValue.serverTimestamp(),$=i=>document.getElementById(i);
+const VAPID="ضع_مفتاح_VAPID_هنا";
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+const em=u=>u.trim().toLowerCase().replace(/\s+/g,'_')+'@baml.app';
+if('serviceWorker' in navigator)navigator.serviceWorker.register('firebase-messaging-sw.js');
+(function(){const d=document.documentElement,b=document.createElement('button');b.className='i';
+ const m=()=>document.querySelector('meta[name=theme-color]').content=d.dataset.theme==='light'?'#efe5d9':'#0a1f1a',u=()=>{b.textContent=d.dataset.theme==='light'?'🌙':'☀️';m()};u();
+ b.onclick=()=>{d.dataset.theme=d.dataset.theme==='light'?'dark':'light';try{localStorage.setItem('baml-theme',d.dataset.theme)}catch(e){}u()};
+ const h=document.querySelector('header');h?h.appendChild(b):(b.style.cssText='position:fixed;top:12px;left:12px;z-index:5',document.body.appendChild(b))})();
+function guard(cb){auth.onAuthStateChanged(async u=>{
+ if(!u)return location.replace('login.html');
+ const d=(await db.doc('users/'+u.uid).get()).data();
+ if(!d||d.status!=='approved'){await auth.signOut();return location.replace('login.html?s='+(d?d.status:'x'))}
+ cb(u,d);push(u)})}
+async function push(u){try{if(!VAPID.startsWith('B')||!firebase.messaging.isSupported())return;
+ if(await Notification.requestPermission()!=='granted')return;
+ const reg=await navigator.serviceWorker.ready;
+ const t=await firebase.messaging().getToken({vapidKey:VAPID,serviceWorkerRegistration:reg});
+ db.doc('users/'+u.uid).update({tokens:firebase.firestore.FieldValue.arrayUnion(t)})}catch(e){}}
+
+const sh=a=>{$('users').classList.toggle('hide',!a);$('set').classList.toggle('hide',a);$('n1').classList.toggle('on',a);$('n2').classList.toggle('on',!a)};
+$('n1').onclick=()=>sh(1);$('n2').onclick=()=>sh(0);$('out').onclick=()=>auth.signOut();
+const av=n=>'<div class="av">'+(n[0]||'?').toUpperCase()+'</div>';
+guard(async(me,my)=>{
+ let nicks={},all=[];
+ db.collection('users/'+me.uid+'/nicks').onSnapshot(s=>{nicks={};s.forEach(d=>nicks[d.id]=d.data().name);draw()});
+ db.collection('users').where('status','==','approved').onSnapshot(s=>{all=s.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.id!==me.uid);draw()});
+ function draw(){$('users').innerHTML=all.map(x=>'<a class="card" href="chat.html?u='+x.id+'">'+av(nicks[x.id]||x.username)+'<div class="n"><b>'+(nicks[x.id]||x.username)+'</b><br><small>@'+x.username+'</small></div></a>').join('')||'<p style="text-align:center;color:var(--m);margin-top:40px">لا يوجد مستخدمون بعد</p>'}
+ if(my.admin){$('n2').classList.remove('hide');
+  db.collection('users').where('status','==','pending').onSnapshot(s=>{
+   $('set').innerHTML='<h3 style="margin-bottom:10px;font-family:Georgia,serif">طلبات الانضمام</h3>'+(s.empty?'<p style="color:var(--m)">لا توجد طلبات</p>':'');
+   s.forEach(d=>{const x=d.data(),c=document.createElement('div');c.className='card';
+    c.innerHTML=av(x.username)+'<div class="n"><b>'+x.username+'</b><br><small>'+x.phone+'</small></div><button>قبول</button><button class="bad">رفض</button>';
+    const b=c.querySelectorAll('button');b[0].onclick=()=>d.ref.update({status:'approved'});b[1].onclick=()=>d.ref.update({status:'rejected'});
+    $('set').appendChild(c)})})}
+});
+</script></body></html>

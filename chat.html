@@ -1,0 +1,121 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0a1f1a"><link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><title>B&A</title><script>try{document.documentElement.dataset.theme=localStorage.getItem('baml-theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')}catch(e){document.documentElement.dataset.theme='dark'}</script><style>
+:root{--bg:#0a1f1a;--w1:#12382d;--w2:#1d5242;--w3:#4d8a74;--p:#15382f;--bub:#1b463a;--me1:#3a7d68;--me2:#235e4c;--t:#f2e9de;--m:#98b3a6;--on:#f6efe6;--ac:#b9bf8c;--sh:0 6px 18px #0006,inset 0 1px 0 #ffffff14}
+:root[data-theme=light]{--bg:#efe5d9;--w1:#d6ddd0;--w2:#a9bfb1;--w3:#7f9d8d;--p:#fbf5ec;--bub:#fffaf3;--me1:#2a6a58;--me2:#14463a;--t:#123a31;--m:#6b857b;--on:#f6efe6;--ac:#8d9a55;--sh:0 8px 20px #123a3126,inset 0 1px 0 #fff}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:var(--bg);color:var(--t);font:15px/1.55 system-ui,"Segoe UI",Tahoma,sans-serif;display:flex;flex-direction:column;height:100dvh;overflow:hidden}
+.bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1}
+header{display:flex;align-items:center;gap:10px;padding:10px 16px;padding-top:max(10px,env(safe-area-inset-top));backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg) 55%,transparent);z-index:2}
+header h1{flex:1;font:700 26px Georgia,"Times New Roman",serif;letter-spacing:1px}
+header h1 b{color:var(--ac);font-weight:400}
+button,input{font:inherit;color:inherit;border:0;outline:0}
+button{cursor:pointer;background:linear-gradient(145deg,var(--me1),var(--me2));color:var(--on);font-weight:700;border-radius:16px;padding:11px 18px;box-shadow:var(--sh);transition:transform .12s}
+button:active{transform:scale(.94)}
+button.i{background:var(--p);color:var(--t);width:44px;height:44px;padding:0;border-radius:50%;font-size:18px}
+button.bad{background:#c9414f;color:#fff}
+input{background:var(--p);box-shadow:var(--sh);border-radius:16px;padding:13px 16px;width:100%}
+input::placeholder{color:var(--m)}input:focus{box-shadow:0 0 0 2px var(--me1)}
+main{flex:1;overflow:auto;padding:12px 14px;scrollbar-width:none}
+.card{background:var(--p);box-shadow:var(--sh);border-radius:26px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:14px;color:inherit;text-decoration:none}
+.av{width:50px;height:50px;border-radius:50%;background:linear-gradient(145deg,var(--w3),var(--ac));display:grid;place-items:center;font:700 20px Georgia,serif;color:#0f3d33;flex:none;box-shadow:var(--sh)}
+.card .n{flex:1;min-width:0}.card small{color:var(--m)}.card b{font-family:Georgia,serif;font-size:17px}
+nav{display:flex;gap:8px;margin:0 14px max(12px,env(safe-area-inset-bottom));padding:6px;background:var(--p);border-radius:26px;box-shadow:var(--sh)}
+nav button{flex:1;background:0;color:var(--m);box-shadow:none}nav button.on{background:linear-gradient(145deg,var(--me1),var(--me2));color:var(--on)}
+.hide{display:none!important}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.96)}}
+header h1{font-size:20px;cursor:pointer}#msgs{display:flex;flex-direction:column;gap:5px}
+.b{max-width:80%;padding:8px 13px 6px;border-radius:20px 20px 20px 6px;background:var(--bub);color:var(--t);align-self:flex-end;word-break:break-word;user-select:none;box-shadow:var(--sh);animation:pop .2s ease}
+.b.me{align-self:flex-start;border-radius:20px 20px 6px 20px;background:linear-gradient(145deg,var(--me1),var(--me2));color:var(--on)}
+.b.sel{outline:3px solid var(--ac);outline-offset:1px}.b small{display:block;font-size:11px;opacity:.65}
+.b img,.b video{max-width:100%;border-radius:14px;display:block}.b audio{max-width:230px;height:40px}.rx{font-size:13px;margin-top:2px}
+#bar{display:flex;gap:6px;padding:8px 12px;background:var(--p);box-shadow:var(--sh);align-items:center;overflow:auto;z-index:2}#bar button{background:var(--bub);color:var(--t);padding:6px 11px;flex:none;box-shadow:none}
+footer{display:flex;gap:8px;padding:8px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom));align-items:center}
+footer #tx{border-radius:26px;padding:13px 18px}footer #snd{background:linear-gradient(145deg,var(--me1),var(--me2));color:var(--on)}
+.rec{background:#c9414f!important;color:#fff!important}</style></head><body><svg class="bg" viewBox="0 0 400 800" preserveAspectRatio="none" aria-hidden="true"><path style="fill:var(--w1)" d="M0 0H400V250C300 190 190 330 0 250Z"/><path style="fill:var(--w2);opacity:.55" d="M400 110C300 170 240 390 0 430V800H400Z"/><path style="fill:var(--w3);opacity:.35" d="M0 570C150 520 280 690 400 610V800H0Z"/></svg><header><button class="i" onclick="location.href='index.html'">→</button><h1 id="ttl">...</h1></header>
+<div id="bar" class="hide"></div><main><div id="msgs"></div></main>
+<footer><button class="i" id="at">📎</button><input id="tx" placeholder="اكتب رسالة"><button class="i" id="mic">🎤</button><button class="i" id="snd">➤</button><input id="fi" type="file" class="hide"></footer><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script><script>
+const cfg={apiKey:"AIzaSyCIYvVSg5KwPnD1lZK7u4oQx1e8l6KXgrc",authDomain:"baml-85266.firebaseapp.com",projectId:"baml-85266",storageBucket:"baml-85266.firebasestorage.app",messagingSenderId:"691113580861",appId:"1:691113580861:web:42f790d56f436ea6eb8d54",measurementId:"G-V2QNK2FNQ1"};
+firebase.initializeApp(cfg);
+const auth=firebase.auth(),db=firebase.firestore(),TS=()=>firebase.firestore.FieldValue.serverTimestamp(),$=i=>document.getElementById(i);
+const VAPID="ضع_مفتاح_VAPID_هنا";
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+const em=u=>u.trim().toLowerCase().replace(/\s+/g,'_')+'@baml.app';
+if('serviceWorker' in navigator)navigator.serviceWorker.register('firebase-messaging-sw.js');
+(function(){const d=document.documentElement,b=document.createElement('button');b.className='i';
+ const m=()=>document.querySelector('meta[name=theme-color]').content=d.dataset.theme==='light'?'#efe5d9':'#0a1f1a',u=()=>{b.textContent=d.dataset.theme==='light'?'🌙':'☀️';m()};u();
+ b.onclick=()=>{d.dataset.theme=d.dataset.theme==='light'?'dark':'light';try{localStorage.setItem('baml-theme',d.dataset.theme)}catch(e){}u()};
+ const h=document.querySelector('header');h?h.appendChild(b):(b.style.cssText='position:fixed;top:12px;left:12px;z-index:5',document.body.appendChild(b))})();
+function guard(cb){auth.onAuthStateChanged(async u=>{
+ if(!u)return location.replace('login.html');
+ const d=(await db.doc('users/'+u.uid).get()).data();
+ if(!d||d.status!=='approved'){await auth.signOut();return location.replace('login.html?s='+(d?d.status:'x'))}
+ cb(u,d);push(u)})}
+async function push(u){try{if(!VAPID.startsWith('B')||!firebase.messaging.isSupported())return;
+ if(await Notification.requestPermission()!=='granted')return;
+ const reg=await navigator.serviceWorker.ready;
+ const t=await firebase.messaging().getToken({vapidKey:VAPID,serviceWorkerRegistration:reg});
+ db.doc('users/'+u.uid).update({tokens:firebase.firestore.FieldValue.arrayUnion(t)})}catch(e){}}
+
+const peer=new URLSearchParams(location.search).get('u');
+guard(async(me,my)=>{
+ const cid=[me.uid,peer].sort().join('_'),col=db.collection('chats/'+cid+'/messages'),fc=db.collection('chats/'+cid+'/files');
+ const pu=(await db.doc('users/'+peer).get()).data()||{username:'؟'},nk=db.doc('users/'+me.uid+'/nicks/'+peer);
+ let name=pu.username;nk.onSnapshot(s=>{name=s.exists?s.data().name:pu.username;$('ttl').textContent=name});
+ $('ttl').onclick=()=>{const n=prompt('اسم جديد لهذا المستخدم',name);if(n)nk.set({name:n})};
+ const notify=async t=>{try{fetch('/api/notify',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+await auth.currentUser.getIdToken()},body:JSON.stringify({to:peer,body:t})})}catch(e){}};
+ const LBL={image:'📷 صورة',video:'🎬 فيديو',audio:'🎤 رسالة صوتية',file:'📄 ملف'};
+ let msgs=[],sel=new Set(),editing=null,urls={};
+ col.orderBy('createdAt').onSnapshot(s=>{msgs=s.docs.map(d=>({id:d.id,...d.data()}));draw()});
+ function draw(){const box=$('msgs'),pr=box.parentNode,end=pr.scrollHeight-pr.scrollTop-pr.clientHeight<120;
+  box.innerHTML='';
+  msgs.forEach(m=>{const d=document.createElement('div'),mine=m.from===me.uid;
+   d.className='b'+(mine?' me':'')+(sel.has(m.id)?' sel':'');
+   let h=m.type==='text'?m.text.replace(/</g,'&lt;'):'<div class="f">'+(m.type==='file'?'📄 '+m.name:'⏳')+'</div>';
+   const rx=Object.values(m.rx||{}).join('');
+   d.innerHTML=h+(rx?'<div class="rx">'+rx+'</div>':'')+'<small>'+(m.createdAt?m.createdAt.toDate().toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'}):'')+(m.edited?' • معدّلة':'')+'</small>';
+   let t;d.onpointerdown=()=>{t=setTimeout(()=>{t=0;tog(m.id)},450)};d.onpointerup=d.onpointerleave=()=>{if(t){clearTimeout(t);t=0;if(sel.size)tog(m.id)}};
+   d.oncontextmenu=e=>e.preventDefault();box.appendChild(d);
+   if(m.fid)media(m,d.querySelector('.f'))});
+  if(end)pr.scrollTop=1e9;bar()}
+ function tog(id){sel.has(id)?sel.delete(id):sel.add(id);draw()}
+ function bar(){const b=$('bar');b.classList.toggle('hide',!sel.size);if(!sel.size)return;
+  const ms=[...sel].map(i=>msgs.find(m=>m.id===i)).filter(Boolean),own=ms.every(m=>m.from===me.uid);
+  b.innerHTML='<button data-x="x">✕</button>'+['👍','❤️','😂','😮','😢','🙏'].map(e=>'<button data-r="'+e+'">'+e+'</button>').join('')
+   +(ms.length===1&&own&&ms[0].type==='text'?'<button data-x="e">✏️</button>':'')+(own?'<button data-x="d">🗑️ ('+ms.length+')</button>':'');
+  b.querySelectorAll('button').forEach(x=>x.onclick=async()=>{
+   if(x.dataset.r){for(const m of ms){const r=m.rx||{};r[me.uid]===x.dataset.r?delete r[me.uid]:r[me.uid]=x.dataset.r;await col.doc(m.id).update({rx:r})}sel.clear();draw()}
+   else if(x.dataset.x==='x'){sel.clear();draw()}
+   else if(x.dataset.x==='e'){editing=ms[0].id;$('tx').value=ms[0].text;$('tx').focus();sel.clear();draw()}
+   else if(x.dataset.x==='d'&&confirm('حذف '+ms.length+' رسالة؟')){for(const m of ms){if(m.fid)for(let i=0;i<m.n;i++)fc.doc(m.fid+'_'+i).delete();await col.doc(m.id).delete()}sel.clear()}})}
+ async function media(m,el){try{
+  if(!urls[m.fid]){const parts=await Promise.all(Array.from({length:m.n},(_,i)=>fc.doc(m.fid+'_'+i).get()));
+   let b=await (await fetch('data:application/octet-stream;base64,'+parts.map(p=>p.data().d).join(''))).blob();
+   if(m.gz)b=await new Response(b.stream().pipeThrough(new DecompressionStream('gzip'))).blob();
+   urls[m.fid]=URL.createObjectURL(new Blob([b],{type:m.mime}))}
+  const u=urls[m.fid];
+  el.innerHTML=m.type==='image'?'<img src="'+u+'">':m.type==='video'?'<video controls playsinline src="'+u+'"></video>':m.type==='audio'?'<audio controls src="'+u+'"></audio>':'<a style="color:inherit;font-weight:700" download="'+m.name+'" href="'+u+'">📄 '+m.name+' ('+Math.round(m.size/1024)+'KB)</a>'
+ }catch(e){el.textContent='تعذر تحميل الملف'}}
+ async function send(){const v=$('tx').value.trim();if(!v)return;$('tx').value='';
+  if(editing){await col.doc(editing).update({text:v,edited:true});editing=null}
+  else{await col.add({from:me.uid,to:peer,type:'text',text:v,createdAt:TS()});notify(v)}}
+ $('snd').onclick=send;$('tx').onkeydown=e=>{if(e.key==='Enter')send()};
+ const kind=f=>f.type.startsWith('image/')?'image':f.type.startsWith('video/')?'video':f.type.startsWith('audio/')?'audio':'file';
+ async function sendFile(f,type){
+  if(f.size>25e6)return alert('الملف كبير جدا (الحد 25MB قبل الضغط)');
+  let b=f,gz=0;
+  if(f.type.startsWith('image/')&&f.type!=='image/gif'){const bm=await createImageBitmap(f),k=Math.min(1,1280/Math.max(bm.width,bm.height)),c=document.createElement('canvas');c.width=bm.width*k;c.height=bm.height*k;c.getContext('2d').drawImage(bm,0,0,c.width,c.height);b=await new Promise(r=>c.toBlob(r,'image/jpeg',.6))}
+  else if(window.CompressionStream&&!/^(video|audio)\//.test(f.type)){b=await new Response(f.stream().pipeThrough(new CompressionStream('gzip'))).blob();gz=1}
+  if(b.size>9e6)return alert('الملف كبير بعد الضغط (الحد 9MB)');
+  const s=await new Promise(r=>{const x=new FileReader();x.onload=()=>r(x.result.split(',')[1]);x.readAsDataURL(b)});
+  const fid=Date.now().toString(36)+Math.random().toString(36).slice(2,6),N=800000,n=Math.ceil(s.length/N),ty=type||kind(f);
+  for(let i=0;i<n;i++)await fc.doc(fid+'_'+i).set({d:s.slice(i*N,(i+1)*N)});
+  await col.add({from:me.uid,to:peer,type:ty,fid,n,gz,mime:f.type||'application/octet-stream',name:f.name||'file',size:f.size,createdAt:TS()});notify(LBL[ty])}
+ $('at').onclick=()=>$('fi').click();$('fi').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(f)await sendFile(f)};
+ let rec,ch=[];$('mic').onclick=async()=>{
+  if(rec&&rec.state==='recording')return rec.stop();
+  try{const st=await navigator.mediaDevices.getUserMedia({audio:true});rec=new MediaRecorder(st,{audioBitsPerSecond:24000});ch=[];
+   rec.ondataavailable=e=>ch.push(e.data);
+   rec.onstop=()=>{st.getTracks().forEach(t=>t.stop());$('mic').classList.remove('rec');const t=rec.mimeType||'audio/webm';sendFile(new File(ch,'voice.'+(t.includes('mp4')?'m4a':'webm'),{type:t}),'audio')};
+   rec.start();$('mic').classList.add('rec')}catch(e){alert('لا يمكن الوصول للميكروفون')}};
+});
+</script></body></html>
