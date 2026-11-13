@@ -23,7 +23,7 @@ nav{display:flex;gap:8px;margin:0 14px max(12px,env(safe-area-inset-bottom));pad
 nav button{flex:1;background:0;color:var(--m);box-shadow:none}nav button.on{background:linear-gradient(145deg,var(--me1),var(--me2));color:var(--on)}
 .hide{display:none!important}
 @keyframes pop{from{opacity:0;transform:translateY(8px) scale(.96)}}
-</style></head><body><svg class="bg" viewBox="0 0 400 800" preserveAspectRatio="none" aria-hidden="true"><path style="fill:var(--w1)" d="M0 0H400V250C300 190 190 330 0 250Z"/><path style="fill:var(--w2);opacity:.55" d="M400 110C300 170 240 390 0 430V800H400Z"/><path style="fill:var(--w3);opacity:.35" d="M0 570C150 520 280 690 400 610V800H0Z"/></svg><header><h1>B<b>&amp;</b>A</h1><button class="i" id="out" title="خروج">⎋</button></header>
+</style></head><body><svg class="bg" viewBox="0 0 400 800" preserveAspectRatio="none" aria-hidden="true"><path style="fill:var(--w1)" d="M0 0H400V250C300 190 190 330 0 250Z"/><path style="fill:var(--w2);opacity:.55" d="M400 110C300 170 240 390 0 430V800H400Z"/><path style="fill:var(--w3);opacity:.35" d="M0 570C150 520 280 690 400 610V800H0Z"/></svg><header><h1>B<b>&amp;</b>A</h1><button class="i" id="bell" title="تفعيل الإشعارات">🔔</button><button class="i" id="out" title="خروج">⎋</button></header>
 <main id="users"></main><main id="set" class="hide"></main>
 <nav><button class="on" id="n1">المحادثات</button><button id="n2" class="hide">الإعدادات</button></nav><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script><script>
 const cfg={apiKey:"AIzaSyCIYvVSg5KwPnD1lZK7u4oQx1e8l6KXgrc",authDomain:"baml-85266.firebaseapp.com",projectId:"baml-85266",storageBucket:"baml-85266.firebasestorage.app",messagingSenderId:"691113580861",appId:"1:691113580861:web:42f790d56f436ea6eb8d54",measurementId:"G-V2QNK2FNQ1"};
@@ -41,15 +41,24 @@ function guard(cb){auth.onAuthStateChanged(async u=>{
  if(!u)return location.replace('login.html');
  const d=(await db.doc('users/'+u.uid).get()).data();
  if(!d||d.status!=='approved'){await auth.signOut();return location.replace('login.html?s='+(d?d.status:'x'))}
- cb(u,d);push(u)})}
-async function push(u){try{if(!VAPID.startsWith('B')||!firebase.messaging.isSupported())return;
- if(await Notification.requestPermission()!=='granted')return;
- const reg=await navigator.serviceWorker.ready;
- const t=await firebase.messaging().getToken({vapidKey:VAPID,serviceWorkerRegistration:reg});
- db.doc('users/'+u.uid).update({tokens:firebase.firestore.FieldValue.arrayUnion(t)})}catch(e){}}
+ cb(u,d);enablePush(u,false)})}
+async function enablePush(u,manual){
+ const say=m=>{if(manual)alert(m);return m};
+ try{
+  if(!VAPID.startsWith('B'))return say('مفتاح VAPID غير مضاف في الكود');
+  if(!('Notification' in window)||!firebase.messaging.isSupported())return say('المتصفح لا يدعم الإشعارات. على الآيفون: ثبّت الموقع على الشاشة الرئيسية أولا (iOS 16.4 أو أحدث)');
+  if(Notification.permission==='denied')return say('الإشعارات محظورة. فعّلها من إعدادات الموقع أو التطبيق في الهاتف');
+  if(Notification.permission!=='granted'&&!manual)return;
+  if(await Notification.requestPermission()!=='granted')return say('لم يتم السماح بالإشعارات');
+  const reg=await navigator.serviceWorker.ready;
+  const t=await firebase.messaging().getToken({vapidKey:VAPID,serviceWorkerRegistration:reg});
+  if(!t)return say('تعذر الحصول على توكن الجهاز');
+  await db.doc('users/'+u.uid).update({tokens:firebase.firestore.FieldValue.arrayUnion(t)});
+  return say('تم تفعيل الإشعارات على هذا الجهاز ✅')
+ }catch(e){return say('خطأ: '+(e.code||e.message))}}
 
 const sh=a=>{$('users').classList.toggle('hide',!a);$('set').classList.toggle('hide',a);$('n1').classList.toggle('on',a);$('n2').classList.toggle('on',!a)};
-$('n1').onclick=()=>sh(1);$('n2').onclick=()=>sh(0);$('out').onclick=()=>auth.signOut();
+$('n1').onclick=()=>sh(1);$('n2').onclick=()=>sh(0);$('out').onclick=()=>auth.signOut();$('bell').onclick=()=>enablePush(auth.currentUser,true);
 const av=n=>'<div class="av">'+(n[0]||'?').toUpperCase()+'</div>';
 guard(async(me,my)=>{
  let nicks={},all=[];

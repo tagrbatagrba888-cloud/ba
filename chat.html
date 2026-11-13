@@ -49,12 +49,21 @@ function guard(cb){auth.onAuthStateChanged(async u=>{
  if(!u)return location.replace('login.html');
  const d=(await db.doc('users/'+u.uid).get()).data();
  if(!d||d.status!=='approved'){await auth.signOut();return location.replace('login.html?s='+(d?d.status:'x'))}
- cb(u,d);push(u)})}
-async function push(u){try{if(!VAPID.startsWith('B')||!firebase.messaging.isSupported())return;
- if(await Notification.requestPermission()!=='granted')return;
- const reg=await navigator.serviceWorker.ready;
- const t=await firebase.messaging().getToken({vapidKey:VAPID,serviceWorkerRegistration:reg});
- db.doc('users/'+u.uid).update({tokens:firebase.firestore.FieldValue.arrayUnion(t)})}catch(e){}}
+ cb(u,d);enablePush(u,false)})}
+async function enablePush(u,manual){
+ const say=m=>{if(manual)alert(m);return m};
+ try{
+  if(!VAPID.startsWith('B'))return say('مفتاح VAPID غير مضاف في الكود');
+  if(!('Notification' in window)||!firebase.messaging.isSupported())return say('المتصفح لا يدعم الإشعارات. على الآيفون: ثبّت الموقع على الشاشة الرئيسية أولا (iOS 16.4 أو أحدث)');
+  if(Notification.permission==='denied')return say('الإشعارات محظورة. فعّلها من إعدادات الموقع أو التطبيق في الهاتف');
+  if(Notification.permission!=='granted'&&!manual)return;
+  if(await Notification.requestPermission()!=='granted')return say('لم يتم السماح بالإشعارات');
+  const reg=await navigator.serviceWorker.ready;
+  const t=await firebase.messaging().getToken({vapidKey:VAPID,serviceWorkerRegistration:reg});
+  if(!t)return say('تعذر الحصول على توكن الجهاز');
+  await db.doc('users/'+u.uid).update({tokens:firebase.firestore.FieldValue.arrayUnion(t)});
+  return say('تم تفعيل الإشعارات على هذا الجهاز ✅')
+ }catch(e){return say('خطأ: '+(e.code||e.message))}}
 
 const peer=new URLSearchParams(location.search).get('u');
 guard(async(me,my)=>{
