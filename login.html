@@ -30,7 +30,7 @@ body{justify-content:center;padding:24px}.box{max-width:380px;width:100%;margin:
 const cfg={apiKey:"AIzaSyCIYvVSg5KwPnD1lZK7u4oQx1e8l6KXgrc",authDomain:"baml-85266.firebaseapp.com",projectId:"baml-85266",storageBucket:"baml-85266.firebasestorage.app",messagingSenderId:"691113580861",appId:"1:691113580861:web:42f790d56f436ea6eb8d54",measurementId:"G-V2QNK2FNQ1"};
 firebase.initializeApp(cfg);
 const auth=firebase.auth(),db=firebase.firestore(),TS=()=>firebase.firestore.FieldValue.serverTimestamp(),$=i=>document.getElementById(i);
-const VAPID="ضع_مفتاح_VAPID_هنا";
+const VAPID="BG2TIDHdDVbrUxFBv2UPwucc9wQjvrhoBIAWV9WKL27_Av16_-rsC8dfNXgm3uVufsIp3sp-8Hb9GDwkYfleQQ0";
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 const em=u=>u.trim().toLowerCase().replace(/\s+/g,'_')+'@baml.app';
 if('serviceWorker' in navigator)navigator.serviceWorker.register('firebase-messaging-sw.js');
