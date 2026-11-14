@@ -92,7 +92,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, collection, onSnapshot, query, orderBy, doc, getDoc, updateDoc, where, limit, getDocs, deleteField } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
+    import { getMessaging, getToken, deleteToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCIYvVSg5KwPnD1lZK7u4oQx1e8l6KXgrc",
@@ -287,6 +287,27 @@
     const ICON = 'https://i.ibb.co/XrzQxS3p/file-00000000dbbc821090f43517cfc56949.webp';
     let fgListenerAttached = false;
 
+    const VAPID_KEY = 'BG2TIDHdDVbrUxFBv2UPwucc9wQjvrhoBIAWV9WKL27_Av16_-rsC8dfNXgm3uVufsIp3sp-8Hb9GDwkYfleQQ0';
+
+    // لو التسجيل فشل (اشتراك قديم عالق مثلاً)، نمسح كل الاشتراكات ونحاول مرة تانية
+    async function getFcmToken(messaging) {
+      try {
+        return await getToken(messaging, { vapidKey: VAPID_KEY });
+      } catch (first) {
+        console.warn('getToken failed, retrying after cleanup:', first);
+        try { await deleteToken(messaging); } catch (e) {}
+        try {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          for (const r of regs) {
+            const s = await r.pushManager.getSubscription();
+            if (s) await s.unsubscribe();
+          }
+        } catch (e) {}
+        await new Promise(r => setTimeout(r, 500));
+        return await getToken(messaging, { vapidKey: VAPID_KEY });
+      }
+    }
+
     // interactive=true لما المستخدم يضغط الزرار (نعرض له أي مشكلة)، false للتشغيل التلقائي الصامت
     async function setupNotifications(interactive = false) {
       const say = (m) => { if (interactive) alert(m); else console.warn(m); };
@@ -304,9 +325,7 @@
         if (perm !== 'granted') return say('لازم توافق على إذن الإشعارات.');
 
         const messaging = getMessaging(app);
-        const token = await getToken(messaging, {
-          vapidKey: 'BG2TIDHdDVbrUxFBv2UPwucc9wQjvrhoBIAWV9WKL27_Av16_-rsC8dfNXgm3uVufsIp3sp-8Hb9GDwkYfleQQ0'
-        });
+        const token = await getFcmToken(messaging);
         if (!token) return say('معرفناش نجيب توكن الإشعارات. جرّب تاني.');
 
         await updateDoc(doc(db, 'users', uid), { fcmToken: token });
@@ -330,7 +349,7 @@
         }
       } catch (e) {
         console.warn('FCM Error:', e);
-        say('خطأ في الإشعارات: ' + (e && e.message ? e.message : e));
+        say('خطأ في الإشعارات: ' + (e && e.name ? e.name + ' - ' : '') + (e && e.message ? e.message : e));
       }
     }
     window.enableNotifications = () => setupNotifications(true);
