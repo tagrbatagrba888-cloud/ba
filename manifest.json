@@ -1,1 +1,26 @@
-{"name":"B&A","short_name":"B&A","start_url":"index.html","scope":"./","display":"standalone","orientation":"portrait","background_color":"#0a1f1a","theme_color":"#0a1f1a","lang":"ar","dir":"rtl","icons":[{"src":"icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},{"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"}]}
+{
+  "name": "B&A Messenger",
+  "short_name": "B&A",
+  "start_url": "/login.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#18112b",
+  "theme_color": "#18112b",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "https://i.ibb.co/XrzQxS3p/file-00000000dbbc821090f43517cfc56949.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://i.ibb.co/XrzQxS3p/file-00000000dbbc821090f43517cfc56949.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,79 +1,239 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0a1f1a"><link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><title>B&A - دخول</title><script>try{document.documentElement.dataset.theme=localStorage.getItem('baml-theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')}catch(e){document.documentElement.dataset.theme='dark'}</script><style>
-:root{--bg:#0a1f1a;--w1:#12382d;--w2:#1d5242;--w3:#4d8a74;--p:#15382f;--bub:#1b463a;--me1:#3a7d68;--me2:#235e4c;--t:#f2e9de;--m:#98b3a6;--on:#f6efe6;--ac:#b9bf8c;--sh:0 6px 18px #0006,inset 0 1px 0 #ffffff14}
-:root[data-theme=light]{--bg:#efe5d9;--w1:#d6ddd0;--w2:#a9bfb1;--w3:#7f9d8d;--p:#fbf5ec;--bub:#fffaf3;--me1:#2a6a58;--me2:#14463a;--t:#123a31;--m:#6b857b;--on:#f6efe6;--ac:#8d9a55;--sh:0 8px 20px #123a3126,inset 0 1px 0 #fff}
-*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%}
-body{background:var(--bg);color:var(--t);font:15px/1.55 system-ui,"Segoe UI",Tahoma,sans-serif;display:flex;flex-direction:column;height:100dvh;overflow:hidden}
-.bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1}
-header{display:flex;align-items:center;gap:10px;padding:10px 16px;padding-top:max(10px,env(safe-area-inset-top));backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg) 55%,transparent);z-index:2}
-header h1{flex:1;font:700 26px Georgia,"Times New Roman",serif;letter-spacing:1px}
-header h1 b{color:var(--ac);font-weight:400}
-button,input{font:inherit;color:inherit;border:0;outline:0}
-button{cursor:pointer;background:linear-gradient(145deg,var(--me1),var(--me2));color:var(--on);font-weight:700;border-radius:16px;padding:11px 18px;box-shadow:var(--sh);transition:transform .12s}
-button:active{transform:scale(.94)}
-button.i{background:var(--p);color:var(--t);width:44px;height:44px;padding:0;border-radius:50%;font-size:18px}
-button.bad{background:#c9414f;color:#fff}
-input{background:var(--p);box-shadow:var(--sh);border-radius:16px;padding:13px 16px;width:100%}
-input::placeholder{color:var(--m)}input:focus{box-shadow:0 0 0 2px var(--me1)}
-main{flex:1;overflow:auto;padding:12px 14px;scrollbar-width:none}
-.card{background:var(--p);box-shadow:var(--sh);border-radius:26px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:14px;color:inherit;text-decoration:none}
-.av{width:50px;height:50px;border-radius:50%;background:linear-gradient(145deg,var(--w3),var(--ac));display:grid;place-items:center;font:700 20px Georgia,serif;color:#0f3d33;flex:none;box-shadow:var(--sh)}
-.card .n{flex:1;min-width:0}.card small{color:var(--m)}.card b{font-family:Georgia,serif;font-size:17px}
-nav{display:flex;gap:8px;margin:0 14px max(12px,env(safe-area-inset-bottom));padding:6px;background:var(--p);border-radius:26px;box-shadow:var(--sh)}
-nav button{flex:1;background:0;color:var(--m);box-shadow:none}nav button.on{background:linear-gradient(145deg,var(--me1),var(--me2));color:var(--on)}
-.hide{display:none!important}
-@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.96)}}
-body{justify-content:center;padding:24px}.box{max-width:380px;width:100%;margin:auto;display:flex;flex-direction:column;gap:12px}.box img{width:116px;height:116px;border-radius:30px;margin:0 auto;box-shadow:0 14px 34px #0007}.box h2{text-align:center;font:700 34px Georgia,serif;letter-spacing:2px}.box h2 b{color:var(--ac);font-weight:400}#msg{text-align:center;color:var(--ac);min-height:22px}.tabs{display:flex;background:var(--p);border-radius:20px;padding:5px;box-shadow:var(--sh)}.tabs button{flex:1;background:0;color:var(--m);box-shadow:none}.tabs .on{background:linear-gradient(145deg,var(--me1),var(--me2));color:var(--on)}</style></head><body><svg class="bg" viewBox="0 0 400 800" preserveAspectRatio="none" aria-hidden="true"><path style="fill:var(--w1)" d="M0 0H400V250C300 190 190 330 0 250Z"/><path style="fill:var(--w2);opacity:.55" d="M400 110C300 170 240 390 0 430V800H400Z"/><path style="fill:var(--w3);opacity:.35" d="M0 570C150 520 280 690 400 610V800H0Z"/></svg><div class="box"><img src="icon-192.png" alt=""><h2>B<b>&amp;</b>A</h2>
-<div class="tabs"><button id="t1" class="on">دخول</button><button id="t2">حساب جديد</button></div>
-<input id="u" placeholder="اسم المستخدم" autocomplete="username"><input id="ph" class="hide" type="tel" placeholder="رقم الهاتف"><input id="p" type="password" placeholder="كلمة السر" autocomplete="current-password">
-<button id="go">دخول</button><div id="msg"></div></div><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script><script>
-const cfg={apiKey:"AIzaSyCIYvVSg5KwPnD1lZK7u4oQx1e8l6KXgrc",authDomain:"baml-85266.firebaseapp.com",projectId:"baml-85266",storageBucket:"baml-85266.firebasestorage.app",messagingSenderId:"691113580861",appId:"1:691113580861:web:42f790d56f436ea6eb8d54",measurementId:"G-V2QNK2FNQ1"};
-firebase.initializeApp(cfg);
-const auth=firebase.auth(),db=firebase.firestore(),TS=()=>firebase.firestore.FieldValue.serverTimestamp(),$=i=>document.getElementById(i);
-const VAPID="BG2TIDHdDVbrUxFBv2UPwucc9wQjvrhoBIAWV9WKL27_Av16_-rsC8dfNXgm3uVufsIp3sp-8Hb9GDwkYfleQQ0";
-auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-const em=u=>u.trim().toLowerCase().replace(/\s+/g,'_')+'@baml.app';
-if('serviceWorker' in navigator)navigator.serviceWorker.register('firebase-messaging-sw.js');
-(function(){const d=document.documentElement,b=document.createElement('button');b.className='i';
- const m=()=>document.querySelector('meta[name=theme-color]').content=d.dataset.theme==='light'?'#efe5d9':'#0a1f1a',u=()=>{b.textContent=d.dataset.theme==='light'?'🌙':'☀️';m()};u();
- b.onclick=()=>{d.dataset.theme=d.dataset.theme==='light'?'dark':'light';try{localStorage.setItem('baml-theme',d.dataset.theme)}catch(e){}u()};
- const h=document.querySelector('header');h?h.appendChild(b):(b.style.cssText='position:fixed;top:12px;left:12px;z-index:5',document.body.appendChild(b))})();
-function guard(cb){auth.onAuthStateChanged(async u=>{
- if(!u)return location.replace('login.html');
- const d=(await db.doc('users/'+u.uid).get()).data();
- if(!d||d.status!=='approved'){await auth.signOut();return location.replace('login.html?s='+(d?d.status:'x'))}
- cb(u,d);enablePush(u,false)})}
-async function enablePush(u,manual){
- const say=m=>{if(manual)alert(m);return m};
- try{
-  if(!VAPID.startsWith('B'))return say('مفتاح VAPID غير مضاف في الكود');
-  if(!('Notification' in window)||!firebase.messaging.isSupported())return say('المتصفح لا يدعم الإشعارات. على الآيفون: ثبّت الموقع على الشاشة الرئيسية أولا (iOS 16.4 أو أحدث)');
-  if(Notification.permission==='denied')return say('الإشعارات محظورة. فعّلها من إعدادات الموقع أو التطبيق في الهاتف');
-  if(Notification.permission!=='granted'&&!manual)return;
-  if(await Notification.requestPermission()!=='granted')return say('لم يتم السماح بالإشعارات');
-  const reg=await navigator.serviceWorker.ready;
-  const t=await firebase.messaging().getToken({vapidKey:VAPID,serviceWorkerRegistration:reg});
-  if(!t)return say('تعذر الحصول على توكن الجهاز');
-  await db.doc('users/'+u.uid).update({tokens:firebase.firestore.FieldValue.arrayUnion(t)});
-  return say('تم تفعيل الإشعارات على هذا الجهاز ✅')
- }catch(e){return say('خطأ: '+(e.code||e.message))}}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#18112b">
+<title>B&A | تسجيل الدخول</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="https://i.ibb.co/XrzQxS3p/file-00000000dbbc821090f43517cfc56949.webp">
+<!-- خط سيريف فخم للاسم -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* الوضع النهاري (افتراضي) */
+    --bg:#f8f7fa;
+    --card:#ffffff;
+    --text:#18112b;
+    --text-muted:#6b6378;
+    --accent:#8c5bf5;
+    --border:#e2dfeb;
+    --input-bg:#f0eff4;
+  }
+  body.dark{
+    /* الوضع الليلي - مستوحى من اللوجو */
+    --bg:#0f091a;
+    --card:#18112b;
+    --text:#f2e6d8;
+    --text-muted:#a99ebf;
+    --accent:#b48aff;
+    --border:#3a2b5c;
+    --input-bg:#211738;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    padding:20px; transition:background .3s, color .3s;
+    background-image: radial-gradient(circle at 50% 0%, rgba(140,91,245,0.15) 0%, transparent 50%);
+  }
+  
+  .card{
+    width:100%; max-width:400px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:28px;
+    padding:30px 24px; text-align:center;
+    box-shadow:0 15px 35px rgba(0,0,0,0.05);
+    position:relative; transition:background .3s, border .3s;
+  }
+  body.dark .card{
+    box-shadow:0 15px 40px rgba(0,0,0,0.4), 0 0 20px rgba(140,91,245,0.1);
+  }
 
-let reg=false;const msg=t=>$('msg').textContent=t,s=new URLSearchParams(location.search).get('s');
-if(s==='pending')msg('حسابك بانتظار موافقة المسؤول');if(s==='rejected')msg('تم رفض حسابك');
-auth.onAuthStateChanged(u=>{if(u&&!window.busy)location.replace('index.html')});
-function tab(r){reg=r;$('t1').className=r?'':'on';$('t2').className=r?'on':'';$('ph').classList.toggle('hide',!r);$('go').textContent=r?'إنشاء حساب':'دخول';msg('')}
-$('t1').onclick=()=>tab(0);$('t2').onclick=()=>tab(1);
-$('go').onclick=async()=>{const u=$('u').value.trim(),p=$('p').value,ph=$('ph').value.trim();
- if(!u||p.length<6||(reg&&!ph))return msg('أكمل البيانات (كلمة السر 6 أحرف على الأقل)');
- window.busy=1;msg('...');
- try{
-  if(reg){const c=await auth.createUserWithEmailAndPassword(em(u),p);
-   const first=(await db.collection('users').limit(1).get()).empty;
-   await db.doc('users/'+c.user.uid).set({username:u,phone:ph,status:first?'approved':'pending',admin:first,createdAt:TS()});
-   if(!first){await auth.signOut();window.busy=0;tab(0);return msg('تم إنشاء الحساب، بانتظار موافقة المسؤول')}}
-  else{const c=await auth.signInWithEmailAndPassword(em(u),p);
-   const d=(await db.doc('users/'+c.user.uid).get()).data();
-   if(!d||d.status!=='approved'){await auth.signOut();window.busy=0;return msg(d&&d.status==='rejected'?'تم رفض حسابك':'حسابك بانتظار موافقة المسؤول')}}
-  location.replace('index.html')
- }catch(e){window.busy=0;msg(e.code==='auth/email-already-in-use'?'اسم المستخدم مستخدم':'بيانات غير صحيحة')}};
-</script></body></html>
+  /* فقاعة اللوجو */
+  .logo-bubble{
+    width:130px; height:130px; margin:0 auto 15px;
+    background:var(--bg); border-radius:50%;
+    border:2px solid var(--border);
+    position:relative; display:flex; align-items:center; justify-content:center;
+    box-shadow: inset 0 0 20px rgba(140,91,245,0.1);
+  }
+  body.dark .logo-bubble{
+    background:#1f1535; border-color:var(--accent);
+    box-shadow: inset 0 0 20px rgba(180,138,255,0.2), 0 0 15px rgba(180,138,255,0.2);
+  }
+  
+  .logo-bubble::after{
+    content:""; position:absolute; bottom:-8px; right:20px;
+    width:22px; height:22px; background:inherit;
+    border-bottom:2px solid var(--border); border-right:2px solid var(--border);
+    transform:rotate(45deg); border-radius:0 0 6px 0;
+  }
+  body.dark .logo-bubble::after{border-color:var(--accent)}
+
+  .logo-img{
+    width:100px; height:100px; border-radius:50%; object-fit:cover;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+
+  /* اسم الموقع */
+  .brand-name{
+    font-family:'Playfair Display', serif;
+    font-size:38px; font-weight:700; margin:10px 0 5px;
+    color:var(--text); letter-spacing:2px;
+    position:relative; display:inline-block;
+  }
+  
+  /* الخط المتموج تحت الاسم */
+  .brand-name::after{
+    content:""; position:absolute; bottom:-5px; left:0; right:0;
+    height:3px; background:var(--accent); border-radius:2px;
+    mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10'%3E%3Cpath d='M0,5 Q25,0 50,5 T100,5' fill='none' stroke='black' stroke-width='3'/%3E%3C/svg%3E");
+    -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10'%3E%3Cpath d='M0,5 Q25,0 50,5 T100,5' fill='none' stroke='black' stroke-width='3'/%3E%3C/svg%3E");
+    mask-size:cover;
+  }
+
+  .subtitle{font-size:13px; color:var(--text-muted); margin-bottom:25px; letter-spacing:.5px}
+
+  label{display:block; text-align:right; font-size:13px; margin:12px 5px 8px; font-weight:600; color:var(--text)}
+  
+  input{
+    width:100%; padding:14px 16px; border-radius:14px;
+    border:1px solid var(--border); background:var(--input-bg);
+    color:var(--text); font-size:15px; outline:none; transition:.2s;
+  }
+  input:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(140,91,245,0.15)}
+  body.dark input:focus{box-shadow:0 0 0 3px rgba(180,138,255,0.15)}
+
+  .btn{
+    width:100%; margin-top:24px; padding:15px; border-radius:14px;
+    background:var(--accent); color:#fff; border:none;
+    font-weight:700; font-size:16px; cursor:pointer; transition:.2s;
+    box-shadow:0 4px 15px rgba(140,91,245,0.3);
+  }
+  body.dark .btn{color:#18112b; box-shadow:0 4px 15px rgba(180,138,255,0.2)}
+  .btn:active{transform:scale(.98)}
+
+  .msg{color:#ff6b6b; font-size:13px; margin-top:12px; min-height:20px}
+  
+  .theme-btn{
+    position:fixed; top:20px; left:20px; background:var(--card); color:var(--text);
+    border:1px solid var(--border); width:45px; height:45px; border-radius:50%;
+    font-size:20px; cursor:pointer; transition:.2s;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+  }
+</style>
+</head>
+<body>
+  <button class="theme-btn" onclick="toggleTheme()">🌓</button>
+
+  <div class="card">
+    <div class="logo-bubble">
+      <img class="logo-img" src="https://i.ibb.co/XrzQxS3p/file-00000000dbbc821090f43517cfc56949.webp" alt="B&A">
+    </div>
+    
+    <div class="brand-name">B&A</div>
+    <div class="subtitle">مراسلة فورية · تسجيل الدخول</div>
+
+    <label>الاسم الكامل</label>
+    <input id="name" type="text" placeholder="اكتب اسمك هنا" autocomplete="name">
+
+    <label>رقم الهاتف</label>
+    <input id="phone" type="tel" inputmode="tel" placeholder="01xxxxxxxxx" autocomplete="tel">
+
+    <button class="btn" id="btn" onclick="submitForm()">دخول</button>
+    <div class="msg" id="msg"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, serverTimestamp }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCIYvVSg5KwPnD1lZK7u4oQx1e8l6KXgrc",
+      authDomain: "baml-85266.firebaseapp.com",
+      projectId: "baml-85266",
+      storageBucket: "baml-85266.firebasestorage.app",
+      messagingSenderId: "691113580861",
+      appId: "1:691113580861:web:42f790d56f436ea6eb8d54"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // تفعيل الوضع الليلي كافتراضي بناءً على طلبك
+    if (localStorage.getItem('theme') !== 'light') document.body.classList.add('dark');
+    
+    window.toggleTheme = () => {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    };
+
+    if (localStorage.getItem('loggedInUid')) location.replace('index.html');
+
+    const normalizePhone = p => p.replace(/\s|-/g,'').trim();
+
+    window.submitForm = async () => {
+      const name = document.getElementById('name').value.trim();
+      const phone = normalizePhone(document.getElementById('phone').value);
+      const msg = document.getElementById('msg');
+      const btn = document.getElementById('btn');
+      msg.textContent = '';
+
+      if (name.length < 2) return msg.textContent = 'اكتب اسم صحيح';
+      if (!/^\+?\d{8,15}$/.test(phone)) return msg.textContent = 'رقم هاتف غير صحيح';
+
+      btn.disabled = true; btn.textContent = 'جاري الدخول...';
+
+      try {
+        const uid = 'u_' + phone.replace(/\+/g,'');
+        const userRef = doc(db, 'users', uid);
+        const snap = await getDoc(userRef);
+
+        if (snap.exists()) {
+          const data = snap.data();
+          if (!data.approved && !data.isAdmin) {
+            msg.textContent = 'حسابك بانتظار موافقة الأدمن';
+            btn.disabled = false; btn.textContent = 'دخول';
+            return;
+          }
+          localStorage.setItem('loggedInUid', uid);
+          localStorage.setItem('loggedInName', data.name);
+          localStorage.setItem('isAdmin', data.isAdmin ? '1' : '0');
+        } else {
+          const adminQuery = await getDocs(query(collection(db,'users'), where('isAdmin','==',true)));
+          const isFirst = adminQuery.empty;
+
+          await setDoc(userRef, {
+            name, phone, uid,
+            isAdmin: isFirst,
+            approved: isFirst,
+            createdAt: serverTimestamp()
+          });
+
+          if (!isFirst) {
+            msg.textContent = 'تم إنشاء الحساب، بانتظار موافقة الأدمن';
+            btn.disabled = false; btn.textContent = 'دخول';
+            return;
+          }
+
+          localStorage.setItem('loggedInUid', uid);
+          localStorage.setItem('loggedInName', name);
+          localStorage.setItem('isAdmin', '1');
+        }
+
+        location.replace('index.html');
+      } catch (e) {
+        console.error(e);
+        msg.textContent = 'حدث خطأ، حاول تاني';
+        btn.disabled = false; btn.textContent = 'دخول';
+      }
+    };
+
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+  </script>
+</body>
+</html>
