@@ -225,13 +225,19 @@
     };
 
     // --- إرسال إشعار للطرف التاني ---
-    const PUSH_API = 'https://YOUR-SERVER.vercel.app/api/send'; // ← غيّر الرابط ده برابط السيرفر بعد النشر
+    // لو السيرفر في مشروع Vercel تاني، حط رابطه الكامل هنا: 'https://اسم-السيرفر.vercel.app/api/send'
+    const PUSH_API = '/api/send';
     function notifyRecipient(msgId) {
       fetch(PUSH_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ chatId, msgId, to: otherUid })
-      }).catch(() => {});
+      })
+        .then(r => r.json().catch(() => ({})).then(j => {
+          if (!r.ok || j.ok === false) console.warn('push API error:', r.status, j);
+          else console.log('push API:', j);
+        }))
+        .catch(err => console.warn('push API unreachable:', err));
     }
 
     // --- دالة إرسال موحدة ---

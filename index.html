@@ -74,6 +74,7 @@
     <img src="https://i.ibb.co/XrzQxS3p/file-00000000dbbc821090f43517cfc56949.webp" alt="logo">
     <div class="title" id="title">B&A</div>
     <button class="icon-btn" id="settingsBtn" style="display:none" onclick="openSettings()">⚙</button>
+    <button class="icon-btn" id="bellBtn" onclick="enableNotifications()" title="تفعيل الإشعارات">🔔</button>
     <button class="icon-btn" onclick="toggleTheme()">🌓</button>
     <button class="icon-btn" onclick="logout()">⏻</button>
   </header>
@@ -90,7 +91,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, query, orderBy, doc, getDoc, updateDoc, where, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy, doc, getDoc, updateDoc, where, limit, getDocs, deleteField } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
     import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
 
     const firebaseConfig = {
@@ -119,8 +120,10 @@
       localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
     };
 
-    window.logout = () => {
+    window.logout = async () => {
       if (!confirm('تسجيل الخروج؟')) return;
+      // نمسح التوكن علشان الإشعارات متروحش لمستخدم تاني على نفس الجهاز
+      try { await updateDoc(doc(db, 'users', uid), { fcmToken: deleteField() }); } catch (e) {}
       localStorage.clear();
       location.replace('login.html');
     };
@@ -281,39 +284,59 @@
     }
 
     // --- إعداد الإشعارات ---
-    async function setupNotifications() {
+    const ICON = 'https://i.ibb.co/XrzQxS3p/file-00000000dbbc821090f43517cfc56949.webp';
+    let fgListenerAttached = false;
+
+    // interactive=true لما المستخدم يضغط الزرار (نعرض له أي مشكلة)، false للتشغيل التلقائي الصامت
+    async function setupNotifications(interactive = false) {
+      const say = (m) => { if (interactive) alert(m); else console.warn(m); };
       try {
-        const perm = await Notification.requestPermission();
-        if (perm !== 'granted') return;
-        
-        const messaging = getMessaging(app);
-        
-        // المفتاح بتاعك اتحط هنا
-        const token = await getToken(messaging, { 
-          vapidKey: 'BG2TIDHdDVbrUxFBv2UPwucc9wQjvrhoBIAWV9WKL27_Av16_-rsC8dfNXgm3uVufsIp3sp-8Hb9GDwkYfleQQ0' 
-        });
-        
-        if (token) {
-          // حفظ التوكن في بيانات المستخدم
-          await updateDoc(doc(db, 'users', uid), { fcmToken: token });
-          console.log("FCM Token saved:", token);
+        if (!('Notification' in window) || !('serviceWorker' in navigator) || !('PushManager' in window)) {
+          const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+          return say(ios
+            ? 'على الآيفون لازم تضيف الموقع للشاشة الرئيسية (Share ← Add to Home Screen) وتفتحه من هناك، وبعدين تدوس 🔔.'
+            : 'المتصفح ده مش بيدعم الإشعارات.');
         }
+        if (Notification.permission === 'denied') {
+          return say('الإشعارات متحجوبة للموقع. افتح إعدادات الموقع في المتصفح وفعّلها يدوي، وبعدين حدّث الصفحة.');
+        }
+        const perm = await Notification.requestPermission();
+        if (perm !== 'granted') return say('لازم توافق على إذن الإشعارات.');
+
+        const messaging = getMessaging(app);
+        const token = await getToken(messaging, {
+          vapidKey: 'BG2TIDHdDVbrUxFBv2UPwucc9wQjvrhoBIAWV9WKL27_Av16_-rsC8dfNXgm3uVufsIp3sp-8Hb9GDwkYfleQQ0'
+        });
+        if (!token) return say('معرفناش نجيب توكن الإشعارات. جرّب تاني.');
+
+        await updateDoc(doc(db, 'users', uid), { fcmToken: token });
+        console.log('FCM Token saved:', token);
+        if (interactive) alert('تم تفعيل الإشعارات ✅');
 
         // لو الموقع مفتوح والرسالة جات
-        onMessage(messaging, (payload) => {
-          const n = Object.assign({}, payload.notification || {}, payload.data || {});
-          if (n.title || n.body) {
-            new Notification(n.title || 'B&A', { 
-              body: n.body || '', 
-              icon: 'https://i.ibb.co/XrzQxS3p/file-00000000dbbc821090f43517cfc56949.webp' 
-            });
-          }
-        });
-      } catch (e) { 
-        console.warn('FCM Error:', e); 
+        if (!fgListenerAttached) {
+          fgListenerAttached = true;
+          onMessage(messaging, async (payload) => {
+            const n = Object.assign({}, payload.notification || {}, payload.data || {});
+            if (!(n.title || n.body)) return;
+            try {
+              const reg = await navigator.serviceWorker.ready;
+              await reg.showNotification(n.title || 'B&A', {
+                body: n.body || '', icon: ICON, badge: ICON,
+                tag: n.tag || undefined, data: { url: n.url || '/index.html' }
+              });
+            } catch (e) { console.warn('showNotification failed:', e); }
+          });
+        }
+      } catch (e) {
+        console.warn('FCM Error:', e);
+        say('خطأ في الإشعارات: ' + (e && e.message ? e.message : e));
       }
     }
-    setupNotifications();
+    window.enableNotifications = () => setupNotifications(true);
+
+    // لو الإذن موجود أصلاً، نجدد التوكن بصمت. غير كده نستنى ضغطة الزرار.
+    if ('Notification' in window && Notification.permission === 'granted') setupNotifications(false);
 
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
   </script>
